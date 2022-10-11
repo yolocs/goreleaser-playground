@@ -8,12 +8,15 @@ before:
 builds:
   - id: foo
     main: ./cmd/foo
+    binary: foo
     env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
+    ldflags:
+      - -s -w -extldflags='-static'
 
 dockers:
   - id: fooimg
@@ -22,6 +25,7 @@ dockers:
     image_templates:
     - "us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}"
     use: buildx
+    skip_push: "false"
 
 archives:
   - replacements:
@@ -47,9 +51,6 @@ changelog:
 release:
   prerelease: allow # remove this when we start publishing non-prerelease or set to auto
   draft: true # allow for manual edits
-  github:
-    owner: sigstore
-    name: cosign
   footer: |
     ### Thanks to all contributors!
 
