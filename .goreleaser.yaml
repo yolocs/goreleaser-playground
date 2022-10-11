@@ -25,7 +25,6 @@ dockers:
     image_templates:
     - "us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}"
     use: buildx
-    skip_push: "false"
 
 archives:
   - replacements:
