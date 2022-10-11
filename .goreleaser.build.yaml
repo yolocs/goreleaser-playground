@@ -47,11 +47,9 @@ changelog:
       - '^docs:'
       - '^test:'
   
-# release:
-#   disable: true
-#   prerelease: allow # remove this when we start publishing non-prerelease or set to auto
-#   footer: |
-#     ### Thanks to all contributors!
+release:
+  disable: true
+
 
 # modelines, feel free to remove those if you don't want/use them:
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
