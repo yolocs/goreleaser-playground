@@ -48,6 +48,7 @@ changelog:
       - '^test:'
   
 release:
+  disable: true
   prerelease: allow # remove this when we start publishing non-prerelease or set to auto
   footer: |
     ### Thanks to all contributors!
