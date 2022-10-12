@@ -1,5 +1,9 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
+env:
+  - TAG={{ if index .Env "TAG_OVERRIDE"  }}{{ .Env.TAG_OVERRIDE }}{{ else }}{{ .Tag }}{{ end }}
+  - REGISTRY={{ if index .Env "CONTAINER_REGISTRY"  }}{{ .Env.CONTAINER_REGISTRY }}{{ else }}us-docker.pkg.dev/gochen/images{{ end }}
+
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -22,7 +26,7 @@ builds:
       - '-s'
       - '-w'
       - '-X={{ .ModulePath }}/internal/version.Name=goreleaser-play-foo'
-      - '-X={{ .ModulePath }}/internal/version.Version={{ .Tag }}'
+      - '-X={{ .ModulePath }}/internal/version.Version={{ .Version }}'
       - '-X={{ .ModulePath }}/internal/version.Commit={{ .Commit }}'
       - '-extldflags=-static'
     goos:
@@ -40,8 +44,8 @@ dockers:
     goos: 'linux'
     goarch: 'amd64'
     image_templates:
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}-amd64'
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:latest-amd64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-amd64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-amd64'
     build_flag_templates:
       - '--platform=linux/amd64'
       - '--pull'
@@ -52,14 +56,14 @@ dockers:
       - '--label=org.opencontainers.image.revision={{ .FullCommit }}'
       - '--label=org.opencontainers.image.source={{ .GitURL }}'
       - '--label=org.opencontainers.image.title=goreleaser-play-foo'
-      - '--label=org.opencontainers.image.version={{ .Tag }}'
+      - '--label=org.opencontainers.image.version={{ .Version }}'
   -
     use: 'buildx'
     goos: 'linux'
     goarch: 'arm64'
     image_templates:
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}-arm64'
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:latest-arm64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-arm64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-arm64'
     build_flag_templates:
       - '--platform=linux/arm64'
       - '--pull'
@@ -70,41 +74,32 @@ dockers:
       - '--label=org.opencontainers.image.revision={{ .FullCommit }}'
       - '--label=org.opencontainers.image.source={{ .GitURL }}'
       - '--label=org.opencontainers.image.title=goreleaser-play-foo'
-      - '--label=org.opencontainers.image.version={{ .Tag }}'
+      - '--label=org.opencontainers.image.version={{ .Version }}'
 
 docker_manifests:
   -
-    name_template: 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}'
+    name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}'
     image_templates:
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}-amd64'
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}-arm64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-amd64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-arm64'
   -
-    name_template: 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}'
+    name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest'
     image_templates:
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}-amd64'
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:{{ .Tag }}-arm64'
-  -
-    name_template: 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:latest'
-    image_templates:
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:latest-amd64'
-      - 'us-docker.pkg.dev/gochen/images/goreleaser-play-foo:latest-arm64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-amd64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-arm64'
 
 
 archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+  - format: 'tar.gz'
+    name_template: 'goreleaser_play_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format_overrides:
+      - goos: 'windows'
+        format: 'zip'
 
 
 checksum:
-  name_template: 'checksums.txt'
-
-
-snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  name_template: 'goreleaser_play_{{ .Version }}_SHA512SUMS'
+  algorithm: 'sha512'
 
 
 changelog:
@@ -117,7 +112,6 @@ changelog:
 release:
   draft: false
   mode: 'replace'
-  disable: true
 
 
 # modelines, feel free to remove those if you don't want/use them:
