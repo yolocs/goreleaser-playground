@@ -1,7 +1,7 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
 env:
-  - TAG={{ if index .Env "TAG_OVERRIDE"  }}{{ .Env.TAG_OVERRIDE }}{{ else }}{{ .Tag }}{{ end }}
+  - TAG={{ if index .Env "TAG_OVERRIDE"  }}{{ .Env.TAG_OVERRIDE }}{{ else }}'{{ .Version }}'{{ end }}
   - REGISTRY={{ if index .Env "CONTAINER_REGISTRY"  }}{{ .Env.CONTAINER_REGISTRY }}{{ else }}us-docker.pkg.dev/gochen/images{{ end }}
 
 before:
@@ -44,7 +44,7 @@ dockers:
     goos: 'linux'
     goarch: 'amd64'
     image_templates:
-      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-amd64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-amd64'
       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-amd64'
     build_flag_templates:
       - '--platform=linux/amd64'
@@ -62,7 +62,7 @@ dockers:
     goos: 'linux'
     goarch: 'arm64'
     image_templates:
-      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-arm64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-arm64'
       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-arm64'
     build_flag_templates:
       - '--platform=linux/arm64'
@@ -78,10 +78,10 @@ dockers:
 
 docker_manifests:
   -
-    name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}'
+    name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}'
     image_templates:
-      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-amd64'
-      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Env.TAG }}-arm64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-amd64'
+      - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-arm64'
   -
     name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest'
     image_templates:
