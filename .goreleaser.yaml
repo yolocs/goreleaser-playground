@@ -3,8 +3,7 @@
 before:
   hooks:
     # You may remove this if you don't use go modules.
-    - go mod tidy
-
+    - echo 'Clone images from the docker release step'
 builds:
   - skip: true
   
