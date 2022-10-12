@@ -119,6 +119,7 @@ changelog:
 release:
   draft: false
   mode: 'replace'
+  disable: true
 
 
 # modelines, feel free to remove those if you don't want/use them:
