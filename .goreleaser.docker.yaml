@@ -89,12 +89,8 @@ docker_manifests:
       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-arm64'
 
 
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+release:
+  disable: true
 
 
 # modelines, feel free to remove those if you don't want/use them:
