@@ -29,10 +29,19 @@ jobs:
           username: '${{ github.actor }}'
           password: '${{ secrets.GITHUB_TOKEN }}'
 
+      # Release images.
+      - uses: 'goreleaser/goreleaser-action@68acf3b1adf004ac9c2f0a4259e85c5f66e99bef' # ratchet:goreleaser/goreleaser-action@v3
+        with:
+          version: 'latest'
+          args: 'release -f .goreleaser.docker.yaml --rm-dist'
+        env:
+          CONTAINER_REGISTRY: ghcr.io/yolocs
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+      # Release SCM.
       - uses: 'goreleaser/goreleaser-action@68acf3b1adf004ac9c2f0a4259e85c5f66e99bef' # ratchet:goreleaser/goreleaser-action@v3
         with:
           version: 'latest'
           args: 'release --rm-dist'
         env:
-          CONTAINER_REGISTRY: ghcr.io/yolocs
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

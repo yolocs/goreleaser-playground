@@ -1,9 +1,5 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
-env:
-  - TAG={{ if index .Env "TAG_OVERRIDE"  }}{{ .Env.TAG_OVERRIDE }}{{ else }}'{{ .Version }}'{{ end }}
-  - REGISTRY={{ if index .Env "CONTAINER_REGISTRY"  }}{{ .Env.CONTAINER_REGISTRY }}{{ else }}us-docker.pkg.dev/gochen/images{{ end }}
-
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -36,57 +32,6 @@ builds:
     goarch:
       - 'amd64'
       - 'arm64'
-
-
-# dockers:
-#   -
-#     use: 'buildx'
-#     goos: 'linux'
-#     goarch: 'amd64'
-#     image_templates:
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-amd64'
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-amd64'
-#     build_flag_templates:
-#       - '--platform=linux/amd64'
-#       - '--pull'
-#       - '--label=org.opencontainers.image.created={{ .CommitTimestamp }}'
-#       - '--label=org.opencontainers.image.description=Why do you care?'
-#       - '--label=org.opencontainers.image.licenses=Apache-2.0'
-#       - '--label=org.opencontainers.image.name=goreleaser-play-foo'
-#       - '--label=org.opencontainers.image.revision={{ .FullCommit }}'
-#       - '--label=org.opencontainers.image.source={{ .GitURL }}'
-#       - '--label=org.opencontainers.image.title=goreleaser-play-foo'
-#       - '--label=org.opencontainers.image.version={{ .Version }}'
-#   -
-#     use: 'buildx'
-#     goos: 'linux'
-#     goarch: 'arm64'
-#     image_templates:
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-arm64'
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-arm64'
-#     build_flag_templates:
-#       - '--platform=linux/arm64'
-#       - '--pull'
-#       - '--label=org.opencontainers.image.created={{ .CommitTimestamp }}'
-#       - '--label=org.opencontainers.image.description=Why do you care?'
-#       - '--label=org.opencontainers.image.licenses=Apache-2.0'
-#       - '--label=org.opencontainers.image.name=goreleaser-play-foo'
-#       - '--label=org.opencontainers.image.revision={{ .FullCommit }}'
-#       - '--label=org.opencontainers.image.source={{ .GitURL }}'
-#       - '--label=org.opencontainers.image.title=goreleaser-play-foo'
-#       - '--label=org.opencontainers.image.version={{ .Version }}'
-
-# docker_manifests:
-#   -
-#     name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}'
-#     image_templates:
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-amd64'
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:{{ .Version }}-arm64'
-#   -
-#     name_template: '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest'
-#     image_templates:
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-amd64'
-#       - '{{ .Env.REGISTRY }}/goreleaser-play-foo:latest-arm64'
 
 
 archives:
