@@ -1,7 +1,7 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
 env:
-  - TAG={{ if index .Env "TAG_OVERRIDE"  }}{{ .Env.TAG_OVERRIDE }}{{ else }}'{{ .Version }}'{{ end }}
+  - TAG={{ if index .Env "TAG_OVERRIDE"  }}{{ .Env.TAG_OVERRIDE }}{{ else }}{{ .Version }}{{ end }}
   - REGISTRY={{ if index .Env "CONTAINER_REGISTRY"  }}{{ .Env.CONTAINER_REGISTRY }}{{ else }}us-docker.pkg.dev/gochen/images{{ end }}
 
 before:
